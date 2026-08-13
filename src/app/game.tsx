@@ -2,7 +2,7 @@ import { Board } from "@/components/Board/Board";
 import { Numpad } from "@/components/Numpad/Numpad";
 import { useGame } from "@/context/GameContext";
 import React from "react";
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function GameScreen() {
@@ -69,11 +69,11 @@ const styles = StyleSheet.create({
   },
   confirmButton: {
     marginTop: 8,
-    backgroundColor: '#3b82f6',
+    backgroundColor: "#3b82f6",
     paddingVertical: 6,
     paddingHorizontal: 10,
     borderRadius: 8,
   },
-  confirmText: { color: '#fff', fontWeight: '700' },
+  confirmText: { color: "#fff", fontWeight: "700" },
   boardWrapper: { alignItems: "center", justifyContent: "center" },
 });

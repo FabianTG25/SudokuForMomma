@@ -101,12 +101,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff0f0",
   },
   incorrect: {
-    borderColor: '#c62828',
-    backgroundColor: '#fff7f7',
+    borderColor: "#c62828",
+    backgroundColor: "#fff7f7",
   },
   confirmed: {
-    backgroundColor: '#e8f5e9',
-    borderColor: '#2e7d32',
+    backgroundColor: "#e8f5e9",
+    borderColor: "#2e7d32",
   },
   highlighted: {
     backgroundColor: "#fff7e6",

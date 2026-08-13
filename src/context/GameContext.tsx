@@ -132,7 +132,11 @@ function reducer(state: GameState, action: Action): GameState {
             cell.incorrect = false;
             continue;
           }
-          if (expected !== null && !Number.isNaN(expected) && cell.value === expected) {
+          if (
+            expected !== null &&
+            !Number.isNaN(expected) &&
+            cell.value === expected
+          ) {
             cell.confirmed = true;
             cell.incorrect = false;
           } else {
