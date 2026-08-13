@@ -1,13 +1,11 @@
-import { DefaultTheme, ThemeProvider } from "expo-router";
-
-import AppTabs from "@/components/app-tabs";
 import { GameProvider } from "@/context/GameContext";
+import { DefaultTheme, Slot, ThemeProvider } from "expo-router";
 
-export default function TabLayout() {
+export default function AppLayout() {
   return (
     <ThemeProvider value={DefaultTheme}>
       <GameProvider>
-        <AppTabs />
+        <Slot />
       </GameProvider>
     </ThemeProvider>
   );

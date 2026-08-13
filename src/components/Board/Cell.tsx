@@ -115,12 +115,13 @@ const styles = StyleSheet.create({
     backgroundColor: "#e8f5e9",
   },
   given: {
-    backgroundColor: "#f4f4f4",
+    backgroundColor: "#EFEBE9",
   },
   text: {
     color: "#111",
   },
   givenText: {
     fontWeight: "700",
+    color: "#3E2723",
   },
 });
