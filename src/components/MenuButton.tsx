@@ -1,7 +1,7 @@
+import { COLORS } from "@/constants/theme";
 import { MaterialIcons } from "@expo/vector-icons";
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { COLORS } from "@/constants/theme";
 
 type Props = {
   label: string;

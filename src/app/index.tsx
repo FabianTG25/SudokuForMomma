@@ -1,4 +1,5 @@
 import MenuButton from "@/components/MenuButton";
+import { COLORS } from "@/constants/theme";
 import { useGame } from "@/context/GameContext";
 import easy from "@/data/levels/easy.json";
 import hard from "@/data/levels/hard.json";
@@ -6,7 +7,6 @@ import medium from "@/data/levels/medium.json";
 import { useRouter } from "expo-router";
 import LottieView from "lottie-react-native";
 import { StyleSheet, Text, View } from "react-native";
-import { COLORS } from "@/constants/theme";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const LOTTIE_SPEED = 0.55;
