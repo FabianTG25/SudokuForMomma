@@ -1,14 +1,14 @@
-import React from 'react';
-import { View, StyleSheet } from 'react-native';
-import { Cell as CellComponent } from './Cell';
-import { useGame } from '@/context/GameContext';
+import { useGame } from "@/context/GameContext";
+import React from "react";
+import { StyleSheet, View } from "react-native";
+import { Cell as CellComponent } from "./Cell";
 
 export const Board: React.FC = () => {
   const { state, dispatch } = useGame();
   const board = state.board;
 
   function handlePress(r: number, c: number) {
-    dispatch({ type: 'SELECT_CELL', row: r, col: c });
+    dispatch({ type: "SELECT_CELL", row: r, col: c });
   }
 
   return (
@@ -22,7 +22,11 @@ export const Board: React.FC = () => {
               col={cIdx}
               value={cell.value}
               given={cell.given}
-              selected={!!state.selected && state.selected.row === rIdx && state.selected.col === cIdx}
+              selected={
+                !!state.selected &&
+                state.selected.row === rIdx &&
+                state.selected.col === cIdx
+              }
               onPress={() => handlePress(rIdx, cIdx)}
             />
           ))}
@@ -37,7 +41,7 @@ const styles = StyleSheet.create({
     gap: 2,
   },
   row: {
-    flexDirection: 'row',
+    flexDirection: "row",
     gap: 2,
   },
 });
