@@ -16,6 +16,9 @@ type Action =
       pencil?: boolean;
     }
   | { type: "TOGGLE_PENCIL" }
+  | { type: "ERASE_CELL" }
+  | { type: "UNDO" }
+  | { type: "HINT" }
   | { type: "MARK_PLAYED"; levelId: string }
   | { type: "CONFIRM_BOARD" }
   | { type: "SET_STATE"; state: Partial<GameState> };
@@ -36,9 +39,28 @@ const initialState: GameState = {
   currentLevel: null,
   board: initialBoard(),
   selected: null,
-  pencilMode: false,
+  isNotesMode: false,
+  history: [],
   playedLevels: [],
 };
+
+function cloneBoard(b: Board): Board {
+  return b.map((r) =>
+    r.map((c) => ({ ...c, notes: Array.isArray(c.notes) ? [...c.notes] : [] })),
+  );
+}
+
+function pushHistory(state: GameState, boardSnapshot: Board) {
+  const max = 200;
+  const hist = [...(state.history || [])];
+  hist.push({
+    board: boardSnapshot,
+    selected: state.selected,
+    isNotesMode: state.isNotesMode,
+  });
+  if (hist.length > max) hist.splice(0, hist.length - max);
+  return hist;
+}
 
 function parsePuzzle(puzzle: string): Board {
   const board = initialBoard();
@@ -77,7 +99,8 @@ function reducer(state: GameState, action: Action): GameState {
           currentLevel: action.level,
           board,
           selected: null,
-          pencilMode: false,
+          isNotesMode: false,
+          history: [],
         };
       } catch (err) {
         console.error("Error in LOAD_LEVEL", err);
@@ -88,14 +111,16 @@ function reducer(state: GameState, action: Action): GameState {
       return { ...state, selected: { row: action.row, col: action.col } };
     case "INSERT_NUMBER": {
       const { row, col, value, pencil } = action;
-      const board = state.board.map((r) => r.map((c) => ({ ...c })));
+      const board = cloneBoard(state.board);
       const cell = board[row][col];
       if (cell.given) return state;
-      if (pencil || state.pencilMode) {
-        // toggle note
-        const notes = new Set(cell.notes);
+
+      // save history snapshot before change
+      const historyBefore = pushHistory(state, cloneBoard(state.board));
+
+      if (pencil || state.isNotesMode) {
+        const notes = new Set(cell.notes || []);
         if (value === null) {
-          // clear notes
           cell.notes = [];
         } else if (notes.has(value)) {
           notes.delete(value);
@@ -105,13 +130,17 @@ function reducer(state: GameState, action: Action): GameState {
           cell.notes = Array.from(notes).sort();
         }
       } else {
-        // Allow tentative entry: set value, clear notes, mark unconfirmed
         cell.value = value;
         cell.notes = [];
         cell.confirmed = false;
         cell.incorrect = false;
       }
-      return { ...state, board, selected: { row, col } };
+      return {
+        ...state,
+        board,
+        selected: { row, col },
+        history: historyBefore,
+      };
     }
     case "CONFIRM_BOARD": {
       if (!state.currentLevel) return state;
@@ -159,7 +188,59 @@ function reducer(state: GameState, action: Action): GameState {
       return { ...state, board };
     }
     case "TOGGLE_PENCIL":
-      return { ...state, pencilMode: !state.pencilMode };
+      return { ...state, isNotesMode: !state.isNotesMode };
+    case "ERASE_CELL": {
+      if (!state.selected) return state;
+      const { row, col } = state.selected;
+      const board = cloneBoard(state.board);
+      const cell = board[row][col];
+      if (cell.given) return state;
+      const historyBefore = pushHistory(state, cloneBoard(state.board));
+      cell.value = null;
+      cell.notes = [];
+      cell.confirmed = false;
+      cell.incorrect = false;
+      return { ...state, board, history: historyBefore };
+    }
+    case "UNDO": {
+      const hist = state.history || [];
+      if (!hist.length) return state;
+      const prev = hist[hist.length - 1];
+      const remaining = hist.slice(0, hist.length - 1);
+      return {
+        ...state,
+        board: cloneBoard(prev.board),
+        selected: prev.selected ?? null,
+        isNotesMode: prev.isNotesMode ?? false,
+        history: remaining,
+      };
+    }
+    case "HINT": {
+      if (!state.currentLevel) return state;
+      const sol = state.currentLevel.solution.replace(/[^0-9]/g, "");
+      const empties: { r: number; c: number }[] = [];
+      for (let r = 0; r < 9; r++) {
+        for (let c = 0; c < 9; c++) {
+          const cell = state.board[r][c];
+          if (
+            !cell.given &&
+            (cell.value === null || cell.value === undefined)
+          ) {
+            empties.push({ r, c });
+          }
+        }
+      }
+      if (!empties.length) return state;
+      const pick = empties[Math.floor(Math.random() * empties.length)];
+      const expected = parseInt(sol[pick.r * 9 + pick.c], 10);
+      const board = cloneBoard(state.board);
+      const historyBefore = pushHistory(state, cloneBoard(state.board));
+      board[pick.r][pick.c].value = expected;
+      // Do NOT mark as given; leave as a normal placed value.
+      board[pick.r][pick.c].confirmed = true;
+      board[pick.r][pick.c].incorrect = false;
+      return { ...state, board, history: historyBefore };
+    }
     case "MARK_PLAYED":
       return {
         ...state,
@@ -217,7 +298,8 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({
           currentLevel: state.currentLevel,
           board: state.board,
           selected: state.selected,
-          pencilMode: state.pencilMode,
+          isNotesMode: state.isNotesMode,
+          history: state.history,
         }),
       ).catch(() => {});
       AsyncStorage.setItem(
@@ -232,7 +314,7 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({
     state.currentLevel,
     state.board,
     state.selected,
-    state.pencilMode,
+    state.isNotesMode,
     state.playedLevels,
   ]);
 

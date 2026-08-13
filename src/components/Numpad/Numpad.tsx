@@ -1,4 +1,5 @@
 import { useGame } from "@/context/GameContext";
+import { MaterialIcons } from "@expo/vector-icons";
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
@@ -32,74 +33,80 @@ export const Numpad: React.FC = () => {
   const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
   return (
-    <View style={styles.container}>
+    <View style={styles.controlsContainer}>
+      <View style={styles.toolbar}>
+        <TouchableOpacity
+          style={styles.toolButton}
+          onPress={() => dispatch({ type: "UNDO" })}
+        >
+          <MaterialIcons name="undo" size={22} color="#8D6E63" />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.toolButton}
+          onPress={() => dispatch({ type: "ERASE_CELL" })}
+        >
+          <MaterialIcons name="backspace" size={22} color="#8D6E63" />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.toolButton} onPress={togglePencil}>
+          <MaterialIcons name="edit" size={22} color="#8D6E63" />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.toolButton}
+          onPress={() => dispatch({ type: "HINT" })}
+        >
+          <MaterialIcons name="lightbulb" size={22} color="#8D6E63" />
+        </TouchableOpacity>
+      </View>
+
       <View style={styles.grid}>
         {numbers.map((n) => (
           <TouchableOpacity
             key={n}
             style={styles.key}
             onPress={() => pressNumber(n)}
-            activeOpacity={0.7}
+            activeOpacity={0.85}
           >
             <Text style={styles.keyText}>{n}</Text>
           </TouchableOpacity>
         ))}
-      </View>
-      <View style={styles.rowButtons}>
-        <TouchableOpacity style={styles.action} onPress={pressDelete}>
-          <Text style={styles.keyText}>Borrar</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.action, state.pencilMode ? styles.actionActive : null]}
-          onPress={togglePencil}
-        >
-          <Text style={styles.keyText}>
-            {state.pencilMode ? "Lápiz ✓" : "Lápiz"}
-          </Text>
-        </TouchableOpacity>
       </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: { padding: 14 },
+  controlsContainer: { padding: 12, backgroundColor: "#FAF8F5" },
+  toolbar: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginBottom: 8,
+  },
+  toolButton: {
+    width: 44,
+    height: 44,
+    borderRadius: 8,
+    backgroundColor: "transparent",
+    alignItems: "center",
+    justifyContent: "center",
+  },
   grid: {
     flexDirection: "row",
     flexWrap: "wrap",
-    justifyContent: "center",
+    justifyContent: "space-between",
   },
   key: {
-    width: 72,
-    height: 72,
-    borderRadius: 12,
-    backgroundColor: "#fafafa",
-    margin: 8,
+    flexBasis: "30%",
+    aspectRatio: 1,
+    borderRadius: 10,
+    backgroundColor: "#FFFFFF",
+    marginBottom: 8,
     alignItems: "center",
     justifyContent: "center",
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.08,
-    shadowRadius: 4,
-    elevation: 2,
+    shadowOpacity: 0.06,
+    shadowRadius: 2,
+    elevation: 1,
   },
-  keyText: { fontSize: 22, fontWeight: "600" },
-  rowButtons: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginTop: 8,
-  },
-  action: {
-    padding: 12,
-    backgroundColor: "#eee",
-    borderRadius: 10,
-    flex: 1,
-    marginHorizontal: 6,
-    alignItems: "center",
-  },
-  actionActive: {
-    backgroundColor: "#dfefff",
-    borderColor: "#86a8ff",
-    borderWidth: 1,
-  },
+  keyText: { fontSize: 28, fontWeight: "600", color: "#333" },
 });

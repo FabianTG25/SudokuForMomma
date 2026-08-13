@@ -1,22 +1,26 @@
 import { MaterialIcons } from "@expo/vector-icons";
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { COLORS } from "@/constants/theme";
 
 type Props = {
   label: string;
   iconName?: string;
   onPress?: () => void;
+  disabled?: boolean;
 };
 
 export const MenuButton: React.FC<Props> = ({
   label,
   iconName = "",
   onPress,
+  disabled = false,
 }) => {
   return (
     <TouchableOpacity
-      style={styles.button}
+      style={[styles.buttonContainer, disabled ? styles.buttonDisabled : null]}
       onPress={onPress}
+      disabled={disabled}
       activeOpacity={0.8}
     >
       <View style={styles.content}>
@@ -28,26 +32,30 @@ export const MenuButton: React.FC<Props> = ({
             style={styles.icon}
           />
         ) : null}
-        <Text style={styles.label}>{label}</Text>
+        <Text style={styles.buttonText}>{label}</Text>
       </View>
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
-  button: {
-    width: "80%",
-    backgroundColor: "#8D6E63",
-    borderRadius: 30,
-    paddingVertical: 15,
-    alignItems: "center",
-    justifyContent: "center",
+  buttonContainer: {
+    width: "100%",
+    backgroundColor: COLORS.mocha,
+    paddingVertical: 18,
+    borderRadius: 16,
     marginBottom: 20,
-    shadowColor: "#4A3B2F",
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    shadowOffset: { width: 0, height: 3 },
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
     elevation: 3,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+  },
+  buttonDisabled: {
+    opacity: 0.5,
   },
   content: {
     flexDirection: "row",
@@ -55,7 +63,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   icon: { marginRight: 12 },
-  label: { color: "#fff", fontSize: 18, fontWeight: "600" },
+  buttonText: {
+    color: COLORS.white,
+    fontSize: 18,
+    fontWeight: "bold",
+    marginLeft: 10,
+  },
 });
 
 export default MenuButton;

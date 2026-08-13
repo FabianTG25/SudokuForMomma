@@ -1,3 +1,14 @@
+export const COLORS = {
+  linen: "#FAF8F5",
+  mocha: "#8D6E63",
+  title: "#4A3B2F",
+  subtitle: "#6d5448",
+  given: "#3E2723",
+  white: "#FFFFFF",
+  panelShadow: "rgba(0,0,0,0.12)",
+};
+
+export default COLORS;
 /**
  * Below are the colors that are used in the app. The colors are defined in the light and dark mode.
  * There are many other ways to style your app. For example, [Nativewind](https://www.nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://reactnativeunistyles.vercel.app), etc.

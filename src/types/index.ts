@@ -24,6 +24,11 @@ export interface GameState {
   currentLevel: Level | null;
   board: Board;
   selected: { row: number; col: number } | null;
-  pencilMode: boolean;
+  isNotesMode: boolean;
+  history: {
+    board: Board;
+    selected: { row: number; col: number } | null;
+    isNotesMode: boolean;
+  }[];
   playedLevels: string[];
 }

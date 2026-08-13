@@ -43,11 +43,14 @@ export default function LevelSelectScreen() {
         data={[...easy, ...medium, ...hard]}
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.list}
+        numColumns={3}
         renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => startLevel(item)}>
+          <TouchableOpacity
+            style={styles.cardWrapper}
+            onPress={() => startLevel(item)}
+          >
             <View style={styles.card}>
-              <Text style={styles.cardTitle}>{item.id}</Text>
-              <Text style={styles.cardSubtitle}>{item.difficulty}</Text>
+              <Text style={styles.cardText}>{item.id}</Text>
             </View>
           </TouchableOpacity>
         )}
@@ -57,20 +60,18 @@ export default function LevelSelectScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 16, backgroundColor: "#FAF8F5" },
-  title: { fontSize: 20, marginBottom: 12, color: "#3E2723" },
-  list: { paddingBottom: 24 },
+  container: { flex: 1, backgroundColor: "#FAF8F5" },
+  title: { fontSize: 20, marginBottom: 12, color: "#3E2723", padding: 16 },
+  list: { paddingBottom: 24, paddingHorizontal: 8 },
+  cardWrapper: { flex: 1, margin: 8 },
   card: {
-    backgroundColor: "#fff",
+    flex: 1,
+    aspectRatio: 1,
+    backgroundColor: "#FFFFFF",
     borderRadius: 12,
-    padding: 14,
-    marginBottom: 12,
-    shadowColor: "#000",
-    shadowOpacity: 0.06,
-    shadowRadius: 6,
-    shadowOffset: { width: 0, height: 2 },
+    justifyContent: "center",
+    alignItems: "center",
     elevation: 2,
   },
-  cardTitle: { fontSize: 16, fontWeight: "700", color: "#3E2723" },
-  cardSubtitle: { fontSize: 12, color: "#6d5448", marginTop: 4 },
+  cardText: { fontSize: 24, color: "#5D4037", fontWeight: "700" },
 });

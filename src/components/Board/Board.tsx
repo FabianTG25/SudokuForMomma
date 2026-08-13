@@ -70,9 +70,7 @@ export const Board: React.FC = () => {
   }, [board]);
 
   return (
-    <View
-      style={[styles.container, { width: cellSize * 9 + boardPadding * 2 }]}
-    >
+    <View style={[styles.container, { width: cellSize * 9 }]}>
       {board.map((row, rIdx) => (
         <View key={rIdx} style={styles.row}>
           {row.map((cell, cIdx) => {
@@ -94,6 +92,7 @@ export const Board: React.FC = () => {
                 col={cIdx}
                 value={cell.value}
                 given={cell.given}
+                notes={cell.notes}
                 selected={isSelected}
                 highlighted={highlight}
                 conflict={conflicts.has(`${rIdx}-${cIdx}`)}
@@ -113,9 +112,11 @@ export const Board: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#bbb",
-    padding: 6,
     alignSelf: "center",
+    backgroundColor: "#FFFFFF",
+    borderWidth: 2,
+    borderColor: "#5D4037",
+    padding: 0,
   },
   row: {
     flexDirection: "row",
