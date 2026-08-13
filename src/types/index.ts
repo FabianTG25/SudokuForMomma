@@ -6,6 +6,8 @@ export type Cell = {
   value: number | null;
   given: boolean;
   notes: number[];
+  confirmed?: boolean;
+  incorrect?: boolean;
 };
 
 export type Board = Cell[][]; // 9x9

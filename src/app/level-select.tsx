@@ -3,13 +3,15 @@ import easy from "@/data/levels/easy.json";
 import hard from "@/data/levels/hard.json";
 import medium from "@/data/levels/medium.json";
 import { useRouter } from "expo-router";
+import React from "react";
 import {
+    Alert,
     FlatList,
-    SafeAreaView,
     StyleSheet,
     Text,
-    TouchableOpacity
+    TouchableOpacity,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const LEVELS_BY_DIFFICULTY = { easy, medium, hard } as const;
 
@@ -17,10 +19,24 @@ export default function LevelSelectScreen() {
   const { dispatch } = useGame();
   const router = useRouter();
 
+  React.useEffect(() => {
+    console.log("level-select mounted");
+  }, []);
+
   function startLevel(level: any) {
-    dispatch({ type: "LOAD_LEVEL", level });
-    dispatch({ type: "MARK_PLAYED", levelId: level.id });
-    router.push("/game");
+    try {
+      console.log("startLevel ->", level.id);
+      Alert.alert("Debug", `Starting level ${level.id}`);
+      dispatch({ type: "LOAD_LEVEL", level });
+      dispatch({ type: "MARK_PLAYED", levelId: level.id });
+      // navigate to absolute path
+      router.push("/game");
+      console.log("navigation attempted to game");
+    } catch (err: any) {
+      const msg = err?.message ?? String(err);
+      Alert.alert("Error starting level", msg);
+      console.error("startLevel error", err);
+    }
   }
 
   return (

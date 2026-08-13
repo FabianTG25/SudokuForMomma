@@ -60,7 +60,15 @@ export default function HomeScreen() {
 
         {Platform.OS === "web" && <WebBadge />}
         <TouchableOpacity
-          onPress={() => router.push("/level-select")}
+          onPress={() => {
+            console.log("Home: push to level-select");
+            try {
+              router.push("/level-select");
+              console.log("Home: router.push called");
+            } catch (err) {
+              console.error("router.push error", err);
+            }
+          }}
           style={{ marginTop: 16 }}
         >
           <ThemedText type="code">Play level-select</ThemedText>

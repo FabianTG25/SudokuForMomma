@@ -39,6 +39,7 @@ export const Numpad: React.FC = () => {
             key={n}
             style={styles.key}
             onPress={() => pressNumber(n)}
+            activeOpacity={0.7}
           >
             <Text style={styles.keyText}>{n}</Text>
           </TouchableOpacity>
@@ -48,7 +49,10 @@ export const Numpad: React.FC = () => {
         <TouchableOpacity style={styles.action} onPress={pressDelete}>
           <Text style={styles.keyText}>Borrar</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.action} onPress={togglePencil}>
+        <TouchableOpacity
+          style={[styles.action, state.pencilMode ? styles.actionActive : null]}
+          onPress={togglePencil}
+        >
           <Text style={styles.keyText}>
             {state.pencilMode ? "Lápiz ✓" : "Lápiz"}
           </Text>
@@ -59,34 +63,43 @@ export const Numpad: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { padding: 12 },
+  container: { padding: 14 },
   grid: {
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "center",
-    gap: 8,
   },
   key: {
-    width: 48,
-    height: 48,
-    borderRadius: 6,
-    backgroundColor: "#eee",
-    margin: 6,
+    width: 72,
+    height: 72,
+    borderRadius: 12,
+    backgroundColor: "#fafafa",
+    margin: 8,
     alignItems: "center",
     justifyContent: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.08,
+    shadowRadius: 4,
+    elevation: 2,
   },
-  keyText: { fontSize: 18 },
+  keyText: { fontSize: 22, fontWeight: "600" },
   rowButtons: {
     flexDirection: "row",
     justifyContent: "space-between",
     marginTop: 8,
   },
   action: {
-    padding: 10,
-    backgroundColor: "#ddd",
-    borderRadius: 6,
+    padding: 12,
+    backgroundColor: "#eee",
+    borderRadius: 10,
     flex: 1,
     marginHorizontal: 6,
     alignItems: "center",
+  },
+  actionActive: {
+    backgroundColor: "#dfefff",
+    borderColor: "#86a8ff",
+    borderWidth: 1,
   },
 });
