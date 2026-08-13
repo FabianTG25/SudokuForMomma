@@ -1,4 +1,5 @@
 import { Board } from "@/components/Board/Board";
+import { Numpad } from "@/components/Numpad/Numpad";
 import { useGame } from "@/context/GameContext";
 import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 
@@ -15,6 +16,7 @@ export default function GameScreen() {
       <View style={styles.boardWrapper}>
         <Board />
       </View>
+      <Numpad />
     </SafeAreaView>
   );
 }

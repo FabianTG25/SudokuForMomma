@@ -7,6 +7,8 @@ export type CellProps = {
   value: number | null;
   given?: boolean;
   selected?: boolean;
+  highlighted?: boolean;
+  sameValue?: boolean;
   onPress?: () => void;
 };
 
@@ -24,6 +26,8 @@ export const Cell: React.FC<CellProps> = ({
         styles.cell,
         selected ? styles.selected : null,
         given ? styles.given : null,
+        highlighted ? styles.highlighted : null,
+        sameValue ? styles.sameValue : null,
       ]}
       onPress={onPress}
       activeOpacity={0.8}
@@ -49,6 +53,12 @@ const styles = StyleSheet.create({
   },
   selected: {
     backgroundColor: "#e6f7ff",
+  },
+  highlighted: {
+    backgroundColor: "#fff7e6",
+  },
+  sameValue: {
+    backgroundColor: "#e8f5e9",
   },
   given: {
     backgroundColor: "#f4f4f4",
